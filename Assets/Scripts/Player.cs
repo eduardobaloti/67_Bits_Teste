@@ -1,36 +1,45 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.Callbacks;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class Player : MonoBehaviour
 {
-    Rigidbody rb;
-    Animator anim;
-    public float grabSpeed;
-    float speed = 1;
-    float horizontalMove, verticalMove;
+    [Header("Player objects")]
+    private Rigidbody rb;
+    private Animator anim;
+
+
+    [Header("Gameplay values")]
+    private float speed = 1;
+    private float grabSpeed = 0.75f;
+    private float horizontalMove, verticalMove;
     public List<GameObject> grabbedEnemies;
+
+
+    [Header("UI Objects")]
     [SerializeField] Joystick joystick;
 
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        anim = GetComponent<Animator>();       
-
+        anim = GetComponent<Animator>();
     }
+
 
     void FixedUpdate()
     {
         CharacterMovement();
         PlayerAnimation();
+    }
+
+
+    void Update()
+    {
         CharacterBalance();
     }
+
 
     void CharacterMovement()
     {
@@ -40,7 +49,9 @@ public class Player : MonoBehaviour
 
         Vector3 direction = new Vector3(horizontalMove, 0, verticalMove);
         transform.LookAt(transform.position + direction);
+
     }
+
 
     void PlayerAnimation()
     {
@@ -48,36 +59,37 @@ public class Player : MonoBehaviour
         else anim.SetBool("walking", false);
     }
 
-    void OnTriggerEnter(Collider other) {
-		if (other.tag == "Enemy") 
-        {
-            //Beat a enemy
-			anim.SetTrigger("punching");
-            StartCoroutine(Beat(other.gameObject));
-		}
 
-        if (other.tag == "Beated") 
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Enemy") //Beat a enemy
         {
-            //Check if beated enemy is valid
+            anim.SetTrigger("punching");
+            StartCoroutine(Beat(other.gameObject));
+        }
+
+        if (other.tag == "Beated") //Check if the beated enemy is valid
+        {
             if (!grabbedEnemies.Contains(other.gameObject) && grabbedEnemies.Count < GameManager.Instance.level)
             {
                 GameManager.Instance.enemiesInGame -= 1;
                 GameManager.Instance.beatedEnemies += 1;
                 grabbedEnemies.Add(other.gameObject);
             }
-		}
+        }
 
-        if (other.tag == "Point") 
+        if (other.tag == "Point")  //Delive a enemy
         {
-            //sold beated enemies
             if (GameManager.Instance.beatedEnemies > 0)
             {
                 GameManager.Instance.IncreaseMoney(grabbedEnemies.Count);
                 DestroyEnemies();
-            } 
+            }
+
             else return;
-		}
-	}
+        }
+    }
+
 
     void CharacterBalance()
     {
@@ -86,19 +98,22 @@ public class Player : MonoBehaviour
         {
             if (grabbed != null)
             {
-                grabbed.transform.rotation =  Quaternion.Euler(20, 180, 0);
+                grabbed.transform.rotation = new Quaternion(transform.localRotation.x, transform.localRotation.y, transform.localRotation.z, transform.localRotation.w * 2);
+
                 grabbed.transform.GetComponent<Animator>().enabled = true;
-                grabbed.transform.position = Vector3.Lerp(grabbed.transform.position, new Vector3(transform.position.x, transform.position.y + 0.2f + (0.15f * i), transform.position.z + 0.1f), grabSpeed / (i/4) * Time.deltaTime);
+                grabbed.transform.position = Vector3.Lerp(grabbed.transform.position, new Vector3(transform.position.x, transform.position.y + 0.2f + (0.15f * i), transform.position.z + 0.1f), grabSpeed / (i / 4) * Time.deltaTime);
                 i++;
             }
         }
     }
 
+
     void DestroyEnemies()
     {
-        foreach(GameObject grabbed in grabbedEnemies) Destroy(grabbed);
+        foreach (GameObject grabbed in grabbedEnemies) Destroy(grabbed);
         grabbedEnemies.Clear();
     }
+
 
     IEnumerator Beat(GameObject enemy)
     {

@@ -603,8 +603,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 79, y: -63.38861}
-  m_SizeDelta: {x: 79.0239, y: 68.5322}
+  m_AnchoredPosition: {x: 81.6, y: -60.123}
+  m_SizeDelta: {x: 90.0628, y: 74.4663}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &254266332
 MonoBehaviour:
@@ -626,7 +626,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9005b15f3c81a574587ec1419b763d92, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4667954330b626c46b8418ebe47ebcee, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4991,13 +4991,7 @@ PrefabInstance:
     - target: {fileID: 7428199064316726586, guid: 162fce3e266b2f5468be94ed7112dece,
         type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:LeftFoot'\n\tTransform
-        'mixamorig:Spine1'\n\tTransform 'mixamorig:LeftToeBase'\n\tTransform 'mixamorig:RightArm'\n\tTransform
-        'mixamorig:LeftLeg'\n\tTransform 'mixamorig:LeftShoulder'\n\tTransform 'mixamorig:RightFoot'\n\tTransform
-        'mixamorig:Head'\n\tTransform 'mixamorig:LeftUpLeg'\n\tand more ...\n\tFrom
-        animation clip 'Death (1)'"
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8740231046630605356, guid: 162fce3e266b2f5468be94ed7112dece,
         type: 3}
