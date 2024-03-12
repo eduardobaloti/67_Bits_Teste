@@ -12,15 +12,12 @@ public class GameManager : Singleton<GameManager>
 
 
     [Header("UI objects")]
-    public TextMeshProUGUI moneyText;
-    public TextMeshProUGUI levelText;
-    public GameObject moneyAdviceText;
 
 
     [Header("Game settings")]
-    public Animator anim;
-    public GameObject spawn1, spawn2, spawn3;
-    public GameObject enemy;
+    [SerializeField] Animator anim;
+    [SerializeField] GameObject spawn1, spawn2, spawn3;
+    [SerializeField] GameObject enemy;
     public int enemiesInGame = 0;
 
 
@@ -41,9 +38,10 @@ public class GameManager : Singleton<GameManager>
         {
             anim.SetTrigger("victory");
             money -= 1;
-            moneyText.text = money.ToString();
+            UIManager.Instance.SetMoneyText(money);
             level += 1;
-            levelText.text = "Lv: " + level.ToString();
+            UIManager.Instance.SetLevel(level);
+
         }
     }
 
@@ -57,11 +55,10 @@ public class GameManager : Singleton<GameManager>
         else
         {
             enemiesInGame += 1;
-            int rn = Random.Range(1, 3);
             GameObject spawnedEnemy = Instantiate(enemy);
-            if (rn == 1) spawnedEnemy.transform.position = spawn1.transform.position;
-            if (rn == 2) spawnedEnemy.transform.position = spawn2.transform.position;
-            if (rn == 3) spawnedEnemy.transform.position = spawn3.transform.position;
+            if (enemiesInGame == 1) spawnedEnemy.transform.position = spawn1.transform.position;
+            if (enemiesInGame == 2) spawnedEnemy.transform.position = spawn2.transform.position;
+            if (enemiesInGame == 3) spawnedEnemy.transform.position = spawn3.transform.position;
         }
     }
 
@@ -69,22 +66,22 @@ public class GameManager : Singleton<GameManager>
     public void IncreaseMoney(int i)
     {
         money += i;
-        moneyText.text = money.ToString();
+        UIManager.Instance.SetMoneyText(money);
         beatedEnemies = 0;
     }
 
 
     public IEnumerator moneyAdviceCor()
     {
-        if (moneyAdviceText.activeInHierarchy)
+        if (UIManager.Instance.moneyAdviceText.activeInHierarchy)
         {
             yield return null;
         }
         else
         {
-            moneyAdviceText.gameObject.SetActive(true);
+            UIManager.Instance.moneyAdviceText.SetActive(true);
             yield return new WaitForSeconds(1);
-            moneyAdviceText.gameObject.SetActive(false);
+            UIManager.Instance.moneyAdviceText.SetActive(false);
         }
     }
 }

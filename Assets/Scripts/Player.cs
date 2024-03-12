@@ -12,12 +12,14 @@ public class Player : MonoBehaviour
 
     [Header("Gameplay values")]
     private float speed = 1;
-    private float grabSpeed = 0.75f;
+    [SerializeField] float grabSpeed = 0.25f;
     private float horizontalMove, verticalMove;
-    public List<GameObject> grabbedEnemies;
+    [SerializeField] List<GameObject> grabbedEnemies = new List<GameObject>();
+    [SerializeField] Vector3 lerpOffset;
+    [SerializeField] float offsetPerEnemyY = 0.15f;
 
 
-    [Header("UI Objects")]
+    [Header("Game Joystick")]
     [SerializeField] Joystick joystick;
 
 
@@ -49,7 +51,6 @@ public class Player : MonoBehaviour
 
         Vector3 direction = new Vector3(horizontalMove, 0, verticalMove);
         transform.LookAt(transform.position + direction);
-
     }
 
 
@@ -74,6 +75,7 @@ public class Player : MonoBehaviour
             {
                 GameManager.Instance.enemiesInGame -= 1;
                 GameManager.Instance.beatedEnemies += 1;
+                other.GetComponent<Animator>().SetBool("dead", true);
                 grabbedEnemies.Add(other.gameObject);
             }
         }
@@ -99,9 +101,10 @@ public class Player : MonoBehaviour
             if (grabbed != null)
             {
                 grabbed.transform.rotation = new Quaternion(transform.localRotation.x, transform.localRotation.y, transform.localRotation.z, transform.localRotation.w * 2);
-
                 grabbed.transform.GetComponent<Animator>().enabled = true;
-                grabbed.transform.position = Vector3.Lerp(grabbed.transform.position, new Vector3(transform.position.x, transform.position.y + 0.2f + (0.15f * i), transform.position.z + 0.1f), grabSpeed / (i / 4) * Time.deltaTime);
+
+                Vector3 offsetPerEnemy = new Vector3(0, offsetPerEnemyY * i, 0);
+                grabbed.transform.position = Vector3.Lerp(grabbed.transform.position, transform.position + lerpOffset + offsetPerEnemy, grabSpeed / (i / 3) * Time.deltaTime);
                 i++;
             }
         }
