@@ -16,15 +16,15 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Game settings")]
     [SerializeField] Animator anim;
-    [SerializeField] GameObject spawn1, spawn2, spawn3;
+    [SerializeField] GameObject spawn1, spawn2;
     [SerializeField] GameObject enemy;
     public int enemiesInGame = 0;
-
+    bool UsedSpawn1, UsedSpawn2 = false;
 
 
     void Start()
     {
-        InvokeRepeating("SpawnEnemy", 1, 8);
+        InvokeRepeating("SpawnEnemy", 1, 7);
     }
 
 
@@ -48,7 +48,7 @@ public class GameManager : Singleton<GameManager>
 
     void SpawnEnemy()
     {
-        if (enemiesInGame >= 3)
+        if (enemiesInGame >= 2)
         {
             return;
         }
@@ -56,9 +56,17 @@ public class GameManager : Singleton<GameManager>
         {
             enemiesInGame += 1;
             GameObject spawnedEnemy = Instantiate(enemy);
-            if (enemiesInGame == 1) spawnedEnemy.transform.position = spawn1.transform.position;
-            if (enemiesInGame == 2) spawnedEnemy.transform.position = spawn2.transform.position;
-            if (enemiesInGame == 3) spawnedEnemy.transform.position = spawn3.transform.position;
+
+            if (!spawn1.GetComponent<SpawnCheck>().usedSpawn)
+            {
+                spawnedEnemy.transform.position = spawn1.transform.position;
+            }
+            else if (!spawn2.GetComponent<SpawnCheck>().usedSpawn)
+            {
+                spawnedEnemy.transform.position = spawn2.transform.position;
+            }
+            else return;
+
         }
     }
 

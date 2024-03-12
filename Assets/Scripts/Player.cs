@@ -122,7 +122,7 @@ public class Player : MonoBehaviour
     {
         enemy.transform.GetChild(2).GetComponent<Rigidbody>().AddForce(Vector3.back * 0.5f, ForceMode.Impulse);
         enemy.transform.GetComponent<Animator>().enabled = false;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
 
         enemy.transform.GetChild(2).GetComponent<Rigidbody>().isKinematic = true;
         enemy.tag = "Beated";
